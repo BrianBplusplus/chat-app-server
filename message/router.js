@@ -13,7 +13,12 @@ router.get("/stream", async (request, response, next) => {
   try {
     const messages = await Message.findAll();
 
-    const json = JSON.stringify(messages); //stringify puts data in an array
+    const action = {
+      type: "ALL_MESSAGES",
+      payload: messages
+    };
+
+    const json = JSON.stringify(action); //stringify puts data in an array
 
     stream.updateInit(json);
     stream.init(request, response);
@@ -22,15 +27,6 @@ router.get("/stream", async (request, response, next) => {
   }
 });
 //-------sse stuff----------//
-
-router.get("/message", async function(request, response, next) {
-  try {
-    const messages = await Message.findAll();
-    response.send(messages);
-  } catch (error) {
-    next(error);
-  }
-});
 
 router.post("/message", async function(request, response, next) {
   try {
@@ -41,7 +37,12 @@ router.post("/message", async function(request, response, next) {
     const message = await Message.create(entity);
     console.log(message.dataValues); //datavalues removes useless info
 
-    const json = JSON.stringify(message); //stringify puts data in an array
+    const action = {
+      type: "SINGLE_MESSAGE",
+      payload: message
+    };
+
+    const json = JSON.stringify(action); //stringify puts data in an array
 
     stream.send(json); // SSE stuff
 
