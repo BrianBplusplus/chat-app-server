@@ -32,7 +32,7 @@ router.get("/message", async function(request, response, next) {
   }
 });
 
-router.post("/message", async function(request, response) {
+router.post("/message", async function(request, response, next) {
   try {
     const { body } = request;
     const { text } = body;
@@ -41,7 +41,11 @@ router.post("/message", async function(request, response) {
     const message = await Message.create(entity);
     console.log(message.dataValues); //datavalues removes useless info
 
-    response.send(message);
+    const json = JSON.stringify(message); //stringify puts data in an array
+
+    stream.send(json); // SSE stuff
+
+    response.send(json);
     console.log("request body text", body);
   } catch (error) {
     next(error);
