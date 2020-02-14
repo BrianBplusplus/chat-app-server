@@ -9,9 +9,17 @@ const router = Router();
 const stream = new SSE();
 
 //-------sse stuff---------//
-router.get("/stream", (request, response, next) => {
-  stream.updateInit("test");
-  stream.init(request, response);
+router.get("/stream", async (request, response, next) => {
+  try {
+    const messages = await Message.findAll();
+
+    const json = JSON.stringify(messages); //stringify puts data in an array
+
+    stream.updateInit(json);
+    stream.init(request, response);
+  } catch (error) {
+    next(error);
+  }
 });
 //-------sse stuff----------//
 
