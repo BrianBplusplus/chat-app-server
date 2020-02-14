@@ -11,9 +11,10 @@ router.post("/message", async function(request, response) {
     const { text } = body;
     const entity = { text };
 
-    const response = await Message.create(entity);
-    console.log(response.dataValues);
+    const message = await Message.create(entity);
+    console.log(message.dataValues); //datavalues removes useless info
 
+    response.send(message);
     console.log("request body text", body);
   } catch (error) {
     next(error);
