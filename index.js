@@ -1,5 +1,5 @@
 const express = require("express");
-
+const messageRouter = require("./message/router");
 const app = express();
 
 const port = 4000;
@@ -11,10 +11,6 @@ function onListen() {
 const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
-app.post("/message", function(request, response) {
-  const { body } = request;
-
-  console.log("request body text", body);
-});
+app.use(messageRouter);
 
 app.listen(port, onListen);
