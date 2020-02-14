@@ -1,9 +1,19 @@
 const express = require("express");
 const Message = require("./model");
+const SSE = require("json-sse");
 
 const { Router } = express;
 
 const router = Router();
+
+const stream = new SSE();
+
+//-------sse stuff---------//
+router.get("/stream", (request, response, next) => {
+  stream.updateInit("test");
+  stream.init(request, response);
+});
+//-------sse stuff----------//
 
 router.get("/message", async function(request, response, next) {
   try {
